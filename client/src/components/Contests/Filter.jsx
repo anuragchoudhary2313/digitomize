@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import formbricks from "@formbricks/js/website";
 
 const handleClick = () => {
@@ -69,17 +70,37 @@ const platforms = [
   "atcoder",
 ];
 function Filter() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [contestsData, setContestsData] = useState([]);
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [open, setOpen] = useState(false);
   const [range, setRange] = useState([0, 0]);
   const [maxValue, setMaxValue] = useState(Number);
+
+  // Initialize selected platforms from URL on component mount
+  useEffect(() => {
+    const platformParam = searchParams.get("platform");
+    if (platformParam) {
+      const platformsFromUrl = platformParam.split(",").filter((p) => platforms.includes(p));
+      if (platformsFromUrl.length > 0) {
+        setSelectedPlatforms(platformsFromUrl);
+      }
+    }
+  }, []); // Run only once on mount
+
   useEffect(() => {
     // Fetch data from the backend API
     const selectedPlatformsParam = selectedPlatforms.join(",");
     const url = selectedPlatformsParam
-      ? `${backendUrl}/contests?host=${selectedPlatformsParam}`
+      ? `${backendUrl}/contests?platform=${selectedPlatformsParam}`
       : `${backendUrl}/contests`;
+
+    // Update URL query params when selected platforms change
+    if (selectedPlatformsParam) {
+      setSearchParams({ platform: selectedPlatformsParam });
+    } else {
+      setSearchParams({});
+    }
       
     fetch(url)
       .then((response) => response.json())
