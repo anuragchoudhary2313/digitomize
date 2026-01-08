@@ -117,3 +117,37 @@
 .cardsBg {
   background: #191919;
 }
+
+/* Global scrollbar styling for a subtle neon glow */
+:root {
+  --scrollbar-track: #0f1115;
+  --scrollbar-thumb: linear-gradient(180deg, #1584ff 0%, #8d41aa 100%);
+  --scrollbar-thumb-border: #0b0d12;
+}
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #1584ff var(--scrollbar-track);
+}
+
+/* WebKit-based browsers */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border: 2px solid var(--scrollbar-thumb-border);
+  border-radius: 9999px;
+  box-shadow: 0 0 12px rgba(21, 132, 255, 0.35);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 16px rgba(141, 65, 170, 0.5);
+}
