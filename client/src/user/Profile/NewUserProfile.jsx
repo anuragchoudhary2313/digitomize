@@ -43,8 +43,8 @@ function NewUserProfile() {
         <meta name="description" content={contentDescription} />
       </Helmet> */}
       <div className="flex mt-8 flex-col md:flex-row w-11/12 mx-auto pb-8">
-        {/* First Column with 450px width */}
-        <div className="flex md:w-[50%]">
+        {/* First Column with flexible max-width */}
+        <div className="flex w-full md:w-auto md:min-w-[400px] md:max-w-[500px] lg:max-w-[550px]">
           <ProfileCard
             username={personal_data.username}
             name={personal_data.name}
