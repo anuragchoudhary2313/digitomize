@@ -1,6 +1,7 @@
-import express from "express";
+﻿import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import pc from "picocolors";
 import mongoose from "mongoose";
 import dataSyncer from "./contest/controllers/DataSyncController.js";
 import contestSyncer from "./contest/controllers/contestController.js";
@@ -29,25 +30,25 @@ if (process.env.NODE_ENV === "production") {
 
 // Handling uncaught exception
 process.on("uncaughtException", (err) => {
-  console.log(`Error: ${err.message}`);
-  console.log("Shutting down due to uncaught exception");
+  console.log(pc.red(`Error: ${err.message}`));
+  console.log(pc.red("Shutting down due to uncaught exception"));
   process.exit(1);
 });
 
 console.log(process.env.TEST);
 async function main() {
   try {
-    console.log("Pinging...");
+    console.log(pc.blue("📡 Pinging..."));
     await fetchContestsData();
-    console.log("Pong!");
+    console.log(pc.green("✓ Pong!"));
   } catch (error) {
-    console.error("Error pinging the server:", error);
+    console.error(pc.red(" Error pinging the server:"), error);
   }
 }
 
 async function setupUserServer() {
   // console.log(process.env.FIREBASE_CREDENTIALS);
-  console.log("ok");
+  console.log(pc.green(" Setup complete"));
   // Get the Firebase service account JSON from the environment variable
   const firebaseCredentials = JSON.parse(process.env.FIREBASE_CREDENTIALS);
   // console.log(firebaseCredentials);
@@ -79,9 +80,9 @@ async function setupContestServer() {
     async () => {
       try {
         await main();
-        console.log("<=======Sent GET request to AWAKE");
+        console.log(pc.yellow(" Sent GET request to AWAKE"));
       } catch (error) {
-        console.error("Error Pinging", error);
+        console.error(pc.red(" Error Pinging"), error);
       }
     },
     13 * 60 * 1000,
@@ -113,7 +114,7 @@ async function startServersProduction() {
     app.use(bodyParser.json());
 
     await mongoose.connect(process.env.MONGODB_URL);
-    console.log("MongoDB Connected.");
+    console.log(pc.cyan("✓ MongoDB Connected"));
 
     await setupUserServer();
     await setupContestServer();
@@ -129,20 +130,20 @@ async function startServersProduction() {
     servers.push("Contest");
     servers.push("Hackathon");
 
-    console.log("┌──────────────────────────────────┐");
+    console.log("â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”");
     if (servers.length > 0) {
       for (const server of servers) {
-        console.log("│ Server active:", server.padEnd(18) + "│");
+        console.log("â”‚ Server active:", server.padEnd(18) + "â”‚");
       }
-      console.log("├──────────────────────────────────┤");
+      console.log("â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤");
     }
     const port = process.env.PORT || 3000;
     appServer = app.listen(port, () => {
-      console.log(`│ Server listening on port ${port}`.padEnd(35) + "│");
-      console.log("└──────────────────────────────────┘");
+      console.log(`â”‚ Server listening on port ${port}`.padEnd(35) + "â”‚");
+      console.log("â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜");
     });
   } catch (err) {
-    console.log("Error starting servers:", err);
+    console.log(pc.red(" Error starting servers:"), err);
   }
 }
 async function startServersDev() {
@@ -151,7 +152,7 @@ async function startServersDev() {
     app.use(bodyParser.json());
 
     await mongoose.connect(process.env.MONGODB_URL);
-    console.log("MongoDB Connected.");
+    console.log(pc.cyan("✓ MongoDB Connected"));
     const servers = [];
     if (process.env.USERS === "true") {
       await setupUserServer();
@@ -175,20 +176,20 @@ async function startServersDev() {
       res.status(404).json({ error: `${req.originalUrl} route not found` });
     });
 
-    console.log("┌──────────────────────────────────┐");
+    console.log("â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”");
     if (servers.length > 0) {
       for (const server of servers) {
-        console.log("│ Server active:", server.padEnd(18) + "│");
+        console.log("â”‚ Server active:", server.padEnd(18) + "â”‚");
       }
-      console.log("├──────────────────────────────────┤");
+      console.log("â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤");
     }
     const port = process.env.PORT || 3000;
     appServer = app.listen(port, () => {
-      console.log(`│ Server listening on port ${port}`.padEnd(35) + "│");
-      console.log("└──────────────────────────────────┘");
+      console.log(`â”‚ Server listening on port ${port}`.padEnd(35) + "â”‚");
+      console.log("â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜");
     });
   } catch (err) {
-    console.log("Error starting servers:", err);
+    console.log(pc.red(" Error starting servers:"), err);
   }
 }
 
@@ -197,15 +198,18 @@ if (process.env.NODE_ENV === "development") {
 } else if (process.env.NODE_ENV === "production") {
   startServersProduction();
 } else {
-  console.log("Error: NODE_ENV not set.");
+  console.log(pc.red(" Error: NODE_ENV not set."));
 }
 
 // Handling unhandled server errors
 process.on("unhandledRejection", (err) => {
-  console.log(`Error: ${err.message}`);
+  console.log(pc.red(`Error: ${err.message}`));
   console.log("Shutting down the server due to Unhandled promise rejection");
 
   appServer.close(() => {
     process.exit(1);
   });
 });
+
+
+

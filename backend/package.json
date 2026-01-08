@@ -27,7 +27,8 @@
     "firebase-admin": "^12.1.0",
     "https": "^1.0.0",
     "inquirer": "^9.2.22",
-    "mongoose": "^7.4.1"
+    "mongoose": "^7.4.1",
+    "picocolors": "^1.1.1"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^1.5.1",
